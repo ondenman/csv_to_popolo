@@ -154,7 +154,7 @@ class Popolo
     website: {
       type: 'link',
       aliases: %w(homepage href url site),
-      multivalue_separator: ';'
+      multivalue_separator: /;(?=http)/
     },
     wikipedia: {
       type: 'link',
@@ -395,7 +395,7 @@ class Popolo
 
     def cell_values(key, separator=nil)
       separator ||= MODEL[key][:multivalue_separator]
-      if separator && use_separator?(key, separator)
+      if separator
         values = @r[key].split(separator)
       else
         values = [@r[key]]
@@ -521,10 +521,6 @@ class Popolo
       popolo[:sources] = [{ url: @r[:source] }] if given? :source
 
       popolo.reject { |_, v| v.nil? || v.empty? }
-    end
-
-    def use_separator?(key, separator)
-      return true unless @r[key].include?(';query') && separator == ';'
     end
   end
 end

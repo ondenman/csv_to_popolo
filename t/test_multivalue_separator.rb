@@ -83,6 +83,6 @@ describe 'multivalue_separator' do
   it 'should split multiple honorific prefixes' do
     member = samoa.data[:persons].find { |p| p[:name] == 'Pierre Lauofo' }
     prefixes = member[:honorific_prefix]
-    prefixes.must_equal ["Lauofo", "Fonotoe", "Nuafesili"]
+    prefixes.must_equal %w(Lauofo Fonotoe Nuafesili)
   end
 end

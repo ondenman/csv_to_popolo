@@ -90,7 +90,8 @@ class Popolo
       ),
     },
     honorific_prefix:            {
-      type: 'asis',
+      type:                 'asis',
+      multivalue_separator: ';',
     },
     honorific_suffix:            {
       type: 'asis',
@@ -494,6 +495,10 @@ class Popolo
       end
     end
 
+    def honorific_prefixes
+      cell_values(:honorific_prefix) if given? :honorific_prefix
+    end
+
     def as_popolo
       popolo = {}
       as_is = MODEL.select { |_, v| v[:type] == 'asis' }.map { |k, _| k }
@@ -510,6 +515,8 @@ class Popolo
 
       popolo[:other_names] = per_language_names + alternate_names
       popolo[:other_names] << { name: @r[:other_name] } if given?(:other_name)
+
+      popolo[:honorific_prefix] = honorific_prefixes
 
       popolo[:contact_details] = contact_details
       popolo[:links] = links

@@ -13,6 +13,10 @@ describe 'multivalue_separator' do
     Popolo::CSV.new('t/data/australia.csv')
   end
 
+  let(:samoa) do
+    Popolo::CSV.new('t/data/samoa.csv')
+  end
+
   it 'should find both mobile numbers for John Doe' do
     doe[:contact_details].count.must_equal 3
     cell_contacts = doe[:contact_details].select { |c| c[:type] == 'cell' }
@@ -74,5 +78,11 @@ describe 'multivalue_separator' do
     urls = clarke[:links].select { |l| l[:note] == 'website' }.map { |l| l[:url] }
     urls.first.must_equal 'http://clarke.example.org'
     urls.last.must_equal 'https://www.conservatives.com/OurTeam/Duncan_Clarke'
+  end
+
+  it 'should split multiple honorific prefixes' do
+    member = samoa.data[:persons].find { |p| p[:name] == 'Pierre Lauofo' }
+    prefixes = member[:honorific_prefix]
+    prefixes.must_equal ["Lauofo", "Fonotoe", "Nuafesili"]
   end
 end
